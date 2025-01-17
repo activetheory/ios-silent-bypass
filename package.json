@@ -50,6 +50,9 @@
     },
     "npm": {
       "publish": false
+    },
+    "hooks": {
+      "before:init": ["npm run format", "npm run test"]
     }
   }
 }

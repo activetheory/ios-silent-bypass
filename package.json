@@ -7,11 +7,12 @@
     ".": "./src/index.js"
   },
   "scripts": {
-    "test": "vitest run --dom",
+    "test": "vitest --dom run",
     "test:watch": "vitest --dom",
-    "format": "prettier --write .",
+    "format": "prettier --write --ignore-unknown",
     "publish": "npm run format && npm run test",
-    "release": "release-it"
+    "release": "release-it",
+    "prepare": "husky"
   },
   "sideEffects": false,
   "type": "module",
@@ -40,6 +41,8 @@
   },
   "devDependencies": {
     "happy-dom": "^16.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.1",
     "prettier": "^3.4.2",
     "release-it": "^18.1.1",
     "vitest": "^3.0.1"
@@ -50,9 +53,11 @@
     },
     "npm": {
       "publish": false
-    },
-    "hooks": {
-      "before:init": ["npm run format", "npm run test"]
     }
+  },
+  "lint-staged": {
+    "**/*": [
+      "npm run format"
+    ]
   }
 }

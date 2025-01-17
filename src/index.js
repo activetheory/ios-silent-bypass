@@ -1,29 +1,19 @@
-const EVENTS = [
-  'auxclick',
-  'click',
-  'contextmenu',
-  'dblclick',
-  'keydown',
-  'keyup',
-  'mousedown',
-  'mouseup',
-  'touchend'
-]
+const EVENTS = ['auxclick', 'click', 'contextmenu', 'dblclick', 'keydown', 'keyup', 'mousedown', 'mouseup', 'touchend'];
 
-export default class {
+export default class SilentHack {
   constructor() {
     this.trying = false;
     this.state = 'blocked';
     this.audioFile = this.createAudioData();
 
-    EVENTS.forEach(evtName => {
-      window.addEventListener(evtName, tryUnblock, { capture: true, passive: true });
-    })
+    EVENTS.forEach((evtName) => {
+      window.addEventListener(evtName, this.tryUnblock.bind(this), { capture: true, passive: true });
+    });
   }
 
   tryUnblock() {
     if (this.state === 'allowed' || this.trying) return;
-    createHTMLAudio();
+    this.createHTMLAudio();
   }
 
   createAudioData() {
@@ -51,23 +41,26 @@ export default class {
     audio.src = this.audioFile;
     audio.load();
 
-    audio.play().then(() => {
-      this.state = 'allowed';
-    }, () => {
-      this.state = 'blocked';
-      audio.src = "about:blank";
-      audio.load();
-      audio = null;
-      this.trying = false;
-    });
+    audio.play().then(
+      () => {
+        this.state = 'allowed';
+      },
+      () => {
+        this.state = 'blocked';
+        audio.src = 'about:blank';
+        audio.load();
+        audio = null;
+        this.trying = false;
+      }
+    );
   }
 
   destroy() {
-    EVENTS.forEach(evtName => {
-      window.removeEventListener(evtName, tryUnblock, { capture: true, passive: true });
+    EVENTS.forEach((evtName) => {
+      window.removeEventListener(evtName, this.tryUnblock.bind(this), { capture: true, passive: true });
     });
   }
-  
+
   get allowed() {
     return this.state === 'allowed';
   }

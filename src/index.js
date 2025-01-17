@@ -1,22 +1,24 @@
 const EVENTS = ['auxclick', 'click', 'contextmenu', 'dblclick', 'keydown', 'keyup', 'mousedown', 'mouseup', 'touchend'];
 
 export default class SilentHack {
+  #trying = false;
+  #state = 'blocked';
+  #audioFile = '';
+
   constructor() {
-    this.trying = false;
-    this.state = 'blocked';
-    this.audioFile = this.createAudioData();
+    this.#audioFile = this.#createAudioData();
 
     EVENTS.forEach((evtName) => {
-      window.addEventListener(evtName, this.tryUnblock.bind(this), { capture: true, passive: true });
+      window.addEventListener(evtName, this.#tryUnblock.bind(this), { capture: true, passive: true });
     });
   }
 
-  tryUnblock() {
-    if (this.state === 'allowed' || this.trying) return;
-    this.createHTMLAudio();
+  #tryUnblock() {
+    if (this.#state === 'allowed' || this.#trying) return;
+    this.#createHTMLAudio();
   }
 
-  createAudioData() {
+  #createAudioData() {
     const rate = 48000;
     const arrayBuffer = new ArrayBuffer(10);
     const dataView = new DataView(arrayBuffer);
@@ -30,38 +32,38 @@ export default class SilentHack {
     return `data:audio/wav;base64,UklGRisAAABXQVZFZm10IBAAAAABAAEA${missingCharacters}AgAZGF0YQcAAACAgICAgICAAAA=`;
   }
 
-  createHTMLAudio() {
-    this.trying = true;
+  #createHTMLAudio() {
+    this.#trying = true;
 
     let audio = document.createElement('audio');
 
     audio.setAttribute('x-webkit-airplay', 'deny');
     audio.preload = 'auto';
     audio.loop = true;
-    audio.src = this.audioFile;
+    audio.src = this.#audioFile;
     audio.load();
 
     audio.play().then(
       () => {
-        this.state = 'allowed';
+        this.#state = 'allowed';
       },
       () => {
-        this.state = 'blocked';
+        this.#state = 'blocked';
         audio.src = 'about:blank';
         audio.load();
         audio = null;
-        this.trying = false;
+        this.#trying = false;
       }
     );
   }
 
   destroy() {
     EVENTS.forEach((evtName) => {
-      window.removeEventListener(evtName, this.tryUnblock.bind(this), { capture: true, passive: true });
+      window.removeEventListener(evtName, this.#tryUnblock.bind(this), { capture: true, passive: true });
     });
   }
 
   get allowed() {
-    return this.state === 'allowed';
+    return this.#state === 'allowed';
   }
 }

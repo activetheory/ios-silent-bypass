@@ -16,14 +16,11 @@ describe('SilentHack', () => {
     expect(silentHack.allowed).toBe(false);
   });
 
-  it('should have a trying property of false', () => {
-    expect(silentHack.trying).toBe(false);
-  });
-
   it('should call tryUnblock on event', async () => {
+    expect(silentHack.allowed).toBe(false);
+
     const event = new Event('click');
     window.dispatchEvent(event);
-    expect(silentHack.trying).toBe(true);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 

@@ -1,7 +1,7 @@
 {
   "name": "@activetheory/ios-silent-bypass",
   "version": "1.0.0",
-  "description": "Simple hack to allow web audio even if physical mute switch is on iPhone/iPads",
+  "description": "Simple hack to allow web audio even if physical mute switch is on iPhone/iPad",
   "main": "./src/index.js",
   "publishConfig": {
     "access": "public"
@@ -31,7 +31,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/activetheory/ios-silent-hack.git"
+    "url": "git+https://github.com/activetheory/ios-silent-bypass.git"
   },
   "prettier": {
     "arrowParens": "always",

@@ -17,7 +17,6 @@
     "test": "vitest --dom run",
     "test:watch": "vitest --dom",
     "format": "prettier --write --ignore-unknown",
-    "publish": "npm run format && npm run test",
     "release": "release-it",
     "prepare": "husky"
   },

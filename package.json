@@ -1,6 +1,6 @@
 {
   "name": "@activetheory/ios-silent-bypass",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple hack to allow web audio even if physical mute switch is on iPhone/iPad",
   "main": "./src/index.js",
   "publishConfig": {
